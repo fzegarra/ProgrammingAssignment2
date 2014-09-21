@@ -1,15 +1,34 @@
-## Put comments here that give an overall description of what your
-## functions do
+##Caching the inverse of a matrix
 
-## Write a short comment describing this function
-
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix<-function(x = matrix()) {
+    ## creating a matrix from the given set of values
+    m <- NULL
+    ## represents "m" as a NULL object then returned by a function whose value is undefined
+    set <- function(y){
+        x<<-y
+        ## assigning a value to an object x in a different environment different from the current
+        m<<-NULL
+    }
+    get <- function() x
+    ## x as a free argument not defined 
+    setinverse <- function(solve) m <<- solve
+    ## the variable "m" of the parent environment will recieve the value of the inverse matrix  
+    getinverse <- function() m
+    list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
+    ## gets a list whose elements are functions
 }
 
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve <- function(x=matrix(), ...) {
+    m <- x$getinverse()
+    ## subsetting the function in the "m" variable 
+    if(!is.null(m)) {
+        message("getting cached data")
+        return(m)
+    }
+    ## if "m" was stored and we can find "m" then return "getting cache data" and the value of "m"  
+    data <- x$get()
+    m <- solve(data, ...)
+    x$setinverse(m)
+    m
+    ## if not then calculate the inverse of the matrix and return the value. 
 }
